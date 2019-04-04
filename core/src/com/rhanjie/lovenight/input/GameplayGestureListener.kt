@@ -1,18 +1,22 @@
 package com.rhanjie.lovenight.input
 
 import com.badlogic.gdx.Gdx
+import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.input.GestureDetector
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
+import com.rhanjie.lovenight.MainGame
 import com.rhanjie.lovenight.gui.Hud
 import com.rhanjie.lovenight.worlds.MapScene
+import com.rhanjie.lovenight.worlds.objects.MapObjectDynamic
+import kotlin.random.Random
 
 class GameplayGestureListener(private val mapScene: MapScene) : GestureDetector.GestureAdapter() {
     private val playerBody = mapScene.player.body
     private val playerPos = playerBody.position
 
     override fun fling(velocityX: Float, velocityY: Float, button: Int): Boolean { //move finger
-        //TODO: Add virtual joystick
-        //playerBody.applyLinearImpulse(velocityX, 0f, playerPos.x, playerPos.y, true)
+
 
         return true
     }
@@ -29,13 +33,13 @@ class GameplayGestureListener(private val mapScene: MapScene) : GestureDetector.
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
-        //TODO: Add virtual joystick
-        /*if (playerBody.linearVelocity.y == 0f) {
-            val force = playerBody.mass * 10 / (1 / 60.0).toFloat()
+        var tapPosition = Vector3(x, y, 0f)
+        mapScene.stage.camera.unproject(tapPosition)
 
-            playerBody.applyForce(0f, force, playerPos.x, playerPos.y, true)
+        println("position: $y ${Vector2(tapPosition.x / MainGame.ratio, tapPosition.y / MainGame.ratio)}")
+        val newObject = MapObjectDynamic(Vector2(tapPosition.x / MainGame.ratio, tapPosition.y / MainGame.ratio), Texture("tiles.png"), mapScene.physicalWorld)
 
-        }*/
+        mapScene.stage.addActor(newObject)
 
         return true
     }
