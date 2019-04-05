@@ -30,15 +30,21 @@ class Player(spawnPosition: Vector2, texture: Texture, physicalWorld: World, var
     private fun updatePosition(delta: Float) {
         body.linearVelocity = Vector2(currentSpeedX * delta, body.linearVelocity.y)
 
+        this.limitVelocity()
+        this.teleportWhenFell()
+
+        camera.position.set(body.position.x, body.position.y , 0f)
+        camera.update()
+    }
+
+    private fun limitVelocity() {
         when {
             body.linearVelocity.x > maxSpeed  -> body.linearVelocity.x = maxSpeed
             body.linearVelocity.x < -maxSpeed -> body.linearVelocity.x = -maxSpeed
         }
 
-        this.teleportWhenFell()
-
-        camera.position.set(body.position.x, body.position.y , 0f)
-        camera.update()
+        if (body.linearVelocity.y > 10f)
+            body.setLinearVelocity(body.linearVelocity.x, 10f)
     }
 
     private fun teleportWhenFell() {

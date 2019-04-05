@@ -60,6 +60,7 @@ class MapScene(val stage: Stage, private val hud: Hud) {
     private fun handleInput() {
         player.currentSpeedX = hud.touchpad.knobPercentX * 300f
 
+        println(player.body.linearVelocity.y)
         if (hud.touchpad.knobPercentY > 0.5f && player.body.linearVelocity.y == 0f) {
             val pos = player.body.position
             val force = player.body.mass * 10 / (1 / 60.0).toFloat()
