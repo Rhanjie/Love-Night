@@ -16,7 +16,6 @@ class Player(spawnPosition: Vector2, texture: Texture, physicalWorld: World, var
 
     init {
         body.isFixedRotation = true
-        //body.applyTorque(1f, true)
     }
 
     override fun update(delta: Float) {

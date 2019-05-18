@@ -23,6 +23,11 @@ class ScreenGameplay : KtxScreen {
 
     var stage = Stage(ScreenViewport(camera), batch)
     var hud = Hud(Stage(ScreenViewport()))
+    val backgroundTexture: Texture = Texture("background.png").apply {
+        //this.sizeBy(1f / MainGame.ratio)
+        //width *= MainGame.ratio
+        //height *= MainGame.ratio
+    }
 
     private val mapScene = MapScene(stage, hud)
 
@@ -43,9 +48,14 @@ class ScreenGameplay : KtxScreen {
     override fun render(delta: Float) {
         this.update(delta)
 
+        //batch.projectionMatrix = camera.combined
+        hud.stage.batch.begin()
+        hud.stage.batch.draw(backgroundTexture, 0f, 0f)
+        hud.stage.batch.end()
+
         stage.draw()
-        hud.stage.draw()
         mapScene.render()
+        hud.stage.draw()
     }
 
     override fun dispose() {

@@ -9,6 +9,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Group
 import com.badlogic.gdx.scenes.scene2d.Stage
+import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.rhanjie.lovenight.MainGame
 import com.rhanjie.lovenight.gui.Hud
 import com.rhanjie.lovenight.worlds.objects.MapObjectDynamic
@@ -45,6 +46,7 @@ class MapScene(val stage: Stage, private val hud: Hud) {
 
         (stage.camera as OrthographicCamera).zoom *= MainGame.ratio
         stage.camera.update()
+
         this.createDebugGround()
         this.createDebugObjects()
     }
@@ -81,13 +83,21 @@ class MapScene(val stage: Stage, private val hud: Hud) {
 
     private fun createDebugGround() {
         var testGround = physicalWorld.body {
-            box(2500f * MainGame.ratio, 10f * MainGame.ratio) {}
+            box(2500f * MainGame.ratio, 100f * MainGame.ratio) {
+                this.density = 40f
+                this.friction = 1f
+                this.restitution = 0f
+            }
 
             this.position.set(0f * MainGame.ratio, 40f * MainGame.ratio)
         }
 
         var testFallDefender = physicalWorld.body {
-            box(10f * MainGame.ratio, 30f * MainGame.ratio) {}
+            box(10f * MainGame.ratio, 200f * MainGame.ratio) {
+                this.density = 40f
+                this.friction = 1f
+                this.restitution = 0f
+            }
 
             this.position.set(-2500f * MainGame.ratio / 2f, 40f * MainGame.ratio)
         }

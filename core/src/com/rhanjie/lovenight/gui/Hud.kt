@@ -21,10 +21,11 @@ class Hud(val stage: Stage) {
     }
 
     val touchpad: Touchpad = Touchpad(10f, style).apply {
-        this.x = 50f
-        this.y = 50f
-        this.width = 250f
-        this.height = 250f
+        this.x = 100f
+        this.y = 80f
+
+        this.width *= 2
+        this.height *= 2
     }
 
     init {

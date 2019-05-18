@@ -9,7 +9,9 @@ import com.badlogic.gdx.physics.box2d.World
 import com.rhanjie.lovenight.MainGame
 import ktx.box2d.body
 
-open class MapObjectDynamic(protected val spawnPosition: Vector2, texture: Texture, physicalWorld: World) : MapObject(texture) {
+open class MapObjectDynamic(protected val spawnPosition: Vector2, texture: Texture, physicalWorld: World)
+    : MapObject(texture) {
+
     val body: Body
 
     init {
@@ -23,6 +25,8 @@ open class MapObjectDynamic(protected val spawnPosition: Vector2, texture: Textu
 
             box(width, height) {
                 this.density = 40f
+                this.friction = 1f
+                this.restitution = 0f
             }
         }
     }
