@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.math.Vector3
 import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer
 import com.badlogic.gdx.physics.box2d.World
@@ -20,15 +21,19 @@ import ktx.box2d.earthGravity
 import kotlin.random.Random
 
 class MapScene(val stage: Stage, private val hud: Hud) {
-    val background = Group()
-    val middleground = Group()
-    val foreground = Group()
+    private val backLayer = Group()
+    private val middleLayer = Group()
+    private val foreLayer = Group()
+
+    private val background: Image = Image(Texture("background.png")).apply {
+        this.width *= MainGame.ratio
+        this.height *= MainGame.ratio
+    }
 
     val physicalWorld: World = createWorld(earthGravity)
-    val debugRenderer = Box2DDebugRenderer()
+    private val debugRenderer = Box2DDebugRenderer()
 
-    var centerPosition = Vector2(stage.viewport.screenWidth / 2f, stage.viewport.screenHeight / 2f)
-        private set
+    private var centerPosition = Vector2(stage.viewport.screenWidth / 2f, stage.viewport.screenHeight / 2f)
 
     var player = Player(centerPosition, Texture("badlogic.jpg"), physicalWorld, stage.camera as OrthographicCamera)
 
@@ -37,11 +42,12 @@ class MapScene(val stage: Stage, private val hud: Hud) {
 
     init {
         stage.apply {
-            this.addActor(background)
-            this.addActor(middleground)
-            this.addActor(foreground)
+            this.addActor(backLayer)
+            this.addActor(middleLayer)
+            this.addActor(foreLayer)
 
-            middleground.addActor(player)
+            middleLayer.addActor(player)
+            backLayer.addActor(background)
         }
 
         (stage.camera as OrthographicCamera).zoom *= MainGame.ratio
@@ -57,12 +63,15 @@ class MapScene(val stage: Stage, private val hud: Hud) {
         debugRenderer.render(physicalWorld, stage.camera.combined)
 
         this.doPhysicalStep()
+
+        val centerWorldScreen = Vector2(stage.viewport.screenWidth * MainGame.ratio / 2f, stage.viewport.screenHeight * MainGame.ratio / 2f)
+        backLayer.setPosition(player.body.position.x - centerWorldScreen.x, player.body.position.y - centerWorldScreen.y)
     }
 
     private fun handleInput() {
         player.currentSpeedX = hud.touchpad.knobPercentX * 300f
 
-        println(player.body.linearVelocity.y)
+        //println(player.body.linearVelocity.y)
         if (hud.touchpad.knobPercentY > 0.5f && player.body.linearVelocity.y == 0f) {
             val pos = player.body.position
             val force = player.body.mass * 10 / (1 / 60.0).toFloat()
@@ -70,6 +79,7 @@ class MapScene(val stage: Stage, private val hud: Hud) {
             player.body.applyForce(0f, force, pos.x, pos.y, true)
         }
     }
+
 
     private fun doPhysicalStep() {
         val frameTime = Math.min(Gdx.graphics.deltaTime, 0.25f)
@@ -85,7 +95,7 @@ class MapScene(val stage: Stage, private val hud: Hud) {
         var testGround = physicalWorld.body {
             box(2500f * MainGame.ratio, 100f * MainGame.ratio) {
                 this.density = 40f
-                this.friction = 1f
+                this.friction = 0.5f
                 this.restitution = 0f
             }
 
@@ -113,9 +123,9 @@ class MapScene(val stage: Stage, private val hud: Hud) {
         val object3 = MapObjectDynamic(randomPosition, Texture("badlogic.jpg"), physicalWorld)
 
         stage.apply {
-            middleground.addActor(object1)
-            middleground.addActor(object2)
-            middleground.addActor(object3)
+            middleLayer.addActor(object1)
+            middleLayer.addActor(object2)
+            middleLayer.addActor(object3)
         }
     }
 }
