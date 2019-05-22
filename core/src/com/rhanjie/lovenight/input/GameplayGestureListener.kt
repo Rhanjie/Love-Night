@@ -33,10 +33,9 @@ class GameplayGestureListener(private val mapScene: MapScene) : GestureDetector.
     }
 
     override fun tap(x: Float, y: Float, count: Int, button: Int): Boolean {
-        var tapPosition = Vector3(x, y, 0f)
+        val tapPosition = Vector3(x, y, 0f)
         mapScene.stage.camera.unproject(tapPosition)
 
-        println("position: $y ${Vector2(tapPosition.x / MainGame.ratio, tapPosition.y / MainGame.ratio)}")
         val newObject = MapObjectDynamic(Vector2(tapPosition.x / MainGame.ratio, tapPosition.y / MainGame.ratio), Texture("tiles.png"), mapScene.physicalWorld)
 
         mapScene.stage.addActor(newObject)

@@ -13,9 +13,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage
 import com.badlogic.gdx.scenes.scene2d.ui.Image
 import com.rhanjie.lovenight.MainGame
 import com.rhanjie.lovenight.gui.Hud
+import com.rhanjie.lovenight.worlds.objects.MapObject
 import com.rhanjie.lovenight.worlds.objects.MapObjectDynamic
 import com.rhanjie.lovenight.worlds.objects.Player
 import ktx.box2d.body
+import ktx.box2d.circle
 import ktx.box2d.createWorld
 import ktx.box2d.earthGravity
 import kotlin.random.Random
@@ -35,7 +37,7 @@ class MapScene(val stage: Stage, private val hud: Hud) {
 
     private var centerPosition = Vector2(stage.viewport.screenWidth / 2f, stage.viewport.screenHeight / 2f)
 
-    var player = Player(centerPosition, Texture("badlogic.jpg"), physicalWorld, stage.camera as OrthographicCamera)
+    var player = Player(centerPosition, Texture("uglytest.png"), physicalWorld, stage.camera as OrthographicCamera)
 
     private var accumulator = 0f
     private val timeStep = 1f / 60f
@@ -115,10 +117,15 @@ class MapScene(val stage: Stage, private val hud: Hud) {
 
     private fun createDebugObjects() {
         var randomPosition = centerPosition.add(Vector2(Random.nextFloat() * 500, Random.nextFloat() * 500))
+        val object1 = MapObject(randomPosition, Texture("icon.png"), physicalWorld)
+        object1.body.type = BodyDef.BodyType.DynamicBody
+        object1.body.circle(2.5f) {
+            this.density = 100f
+        }
 
-        val object1 = MapObjectDynamic(randomPosition, Texture("badlogic.jpg"), physicalWorld)
         randomPosition = centerPosition.add(Vector2(Random.nextFloat() * 500, Random.nextFloat() * 500))
         val object2 = MapObjectDynamic(randomPosition, Texture("badlogic.jpg"), physicalWorld)
+
         randomPosition = centerPosition.add(Vector2(Random.nextFloat() * 500, Random.nextFloat() * 500))
         val object3 = MapObjectDynamic(randomPosition, Texture("badlogic.jpg"), physicalWorld)
 

@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World
 import com.badlogic.gdx.scenes.scene2d.Actor
 import com.rhanjie.lovenight.MainGame
 import ktx.box2d.body
+import ktx.box2d.box
 import kotlin.random.Random
 
 open class MapObject(protected val spawnPosition: Vector2, texture: Texture, physicalWorld: World) : Actor() {
@@ -27,11 +28,19 @@ open class MapObject(protected val spawnPosition: Vector2, texture: Texture, phy
             this.position.set(spawnPosition)
             this.type = BodyDef.BodyType.StaticBody
 
-            box(width, height) {
+            /*box(width, height) {
                 this.density = 40f
                 this.friction = 0.5f
                 this.restitution = 0f
-            }
+            }*/
+        }
+    }
+
+    fun addBoxCollider(width: Float = this.width, height: Float = this.height) {
+        body.box(width, height) {
+            this.density = 40f
+            this.friction = 0.5f
+            this.restitution = 0f
         }
     }
 

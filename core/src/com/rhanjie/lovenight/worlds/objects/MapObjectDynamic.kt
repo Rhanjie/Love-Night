@@ -8,12 +8,19 @@ import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import com.rhanjie.lovenight.MainGame
 import ktx.box2d.body
+import ktx.box2d.box
 
 open class MapObjectDynamic(spawnPosition: Vector2, texture: Texture, physicalWorld: World)
     : MapObject(spawnPosition, texture, physicalWorld) {
 
     init {
         body.type = BodyDef.BodyType.DynamicBody
+
+        body.box(width, height) {
+            this.density = 40f
+            this.friction = 0.5f
+            this.restitution = 0f
+        }
     }
 
     override fun update(delta: Float) {

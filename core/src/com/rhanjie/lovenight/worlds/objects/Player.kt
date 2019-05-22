@@ -4,18 +4,35 @@ import com.badlogic.gdx.graphics.Color
 import com.badlogic.gdx.graphics.OrthographicCamera
 import com.badlogic.gdx.graphics.Texture
 import com.badlogic.gdx.math.Vector2
+import com.badlogic.gdx.physics.box2d.BodyDef
 import com.badlogic.gdx.physics.box2d.World
 import com.rhanjie.lovenight.MainGame
+import ktx.box2d.box
+import ktx.box2d.circle
 import kotlin.random.Random
 
 class Player(spawnPosition: Vector2, texture: Texture, physicalWorld: World, var camera: OrthographicCamera)
-    : MapObjectDynamic(spawnPosition, texture, physicalWorld) {
+    : MapObject(spawnPosition, texture, physicalWorld) {
 
     var maxSpeed = 4f
     var currentSpeedX = 0f
 
     init {
+        body.type = BodyDef.BodyType.DynamicBody
         body.isFixedRotation = true
+
+        //this.addBoxCollider()
+        body.box(width, height * 3/4, Vector2(0f, 0.32f)) {
+            this.density = 40f
+            this.friction = 0.5f
+            this.restitution = 0f
+        }
+
+        body.circle(0.65f, Vector2(0f, -0.65f)) {
+            this.density = 40f
+            this.friction = 0.5f
+            this.restitution = 0f
+        }
     }
 
     override fun update(delta: Float) {
